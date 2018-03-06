@@ -17,19 +17,29 @@ Someone dragged me in here.
 
 === Not new
 
-Ingalls: (1.11.x) - still gets bug fixes.
+Ingalls: (1.11.x)
+
+still gets bug fixes.
 
 Used by Spring Boot 1.5.x
 
 === Somewhat new
 
-Kay: (2.0.x) - 1st GA (Oct. 2017) - current: 2.0.5
+Kay: (2.0.x)
+
+1st GA Oct. 2017
+
+current: 2.0.5
 
 Used by Spring Boot 2.0 (Feb. 2018)
 
 === Super new
 
-Lovelace: (2.1.x) - current: 2.1.0.M1 - (ETA: June 2018)
+Lovelace: (2.1.x)
+
+current: 2.1.0.M1
+
+ETA: June 2018
 
 == Kay
 
@@ -37,19 +47,30 @@ Lovelace: (2.1.x) - current: 2.1.0.M1 - (ETA: June 2018)
 
 * Java 8 is required.
 
-* Use of new language features (Closures).
+* Use of new language features (Lambdas, Stream).
 
 * Use of new classes (Optional, java.time API).
 
-=== New `CrudRepository` interface
+[NOTE.speaker]
+====
+We tried to use more Optional and Streams but had to rip it out for performance reasons :-/
+====
 
-* `findOne` -> `findById`.
+=== Pet Peeve
 
-* methods return `Optional`.
+You don't want to use `LocalDateTime`.
 
-* id doesn't have to be serializable.
+You want to use `Instant` instead.
 
-```
+[NOTE.speaker]
+====
+`LocalDataTime` is mostly useless since it is not a point in time.
+====
+
+=== `CrudRepository`
+
+[source,java]
+----
 interface CrudRepository<T, ID> extends Repository<T, ID> {
     S save(S entity);
     Iterable<S> saveAll(Iterable<S> entities)
@@ -60,11 +81,20 @@ interface CrudRepository<T, ID> extends Repository<T, ID> {
     void delete(T entity);
     void deleteAll(Iterable<? extends T> entities);
 }
-```
+----
+
+[NOTE.speaker]
+====
+byId
+All
+Optional returntype
+====
 
 === Tooling support for null-safety
 
-via Spring's `@NonNullApi` and `@Nullable` annotations.
+`@NonNullApi`
+
+`@Nullable`
 
 === Java 9 compatibility.
 
@@ -125,5 +155,89 @@ The important part is the reactive support
 ```
 
 == Ingalls
+
+=== Mongo DB ChangeStreams
+
+```
+Aggregation filter = newAggregation(User.class, match(where("age").gte(38));
+Flux<ChangeStreamEvent<User>> flux = reactiveTemplate.changeStream(filter), User.class, ChangeStreamOptions.empty());
+```
+
+=== Mongo DB jsonSchema
+
+https://github.com/spring-projects/spring-data-mongodb/pull/524
+
+=== Spring Data JDBC
+
+== Spring Data JDBC
+
+(needs top level section)
+
+=== @Query support
+
+=== Crud support
+
+very, very limited
+
+=== Sorry no pagination yet
+
+=== MyBatis integration
+
+== TOQAEFT
+
+The One Question Asked Every Freaking Time
+
+=== Is there reactive support for JPA/JDBC?
+
+TL;DR: No.
+
+=== Long Version
+
+JPA is unfit for a reactive API.
+
+Won't happen.
+
+[NOTE.speaker]
+====
+Will anything happen with JPA at all?
+====
+
+=== JDBC
+
+JDBC is also blocking and will stay this way.
+
+=== Oracle Works on an Async SQL-API
+
+Not Flow/Reactive Stream based
+
+https://events.rainfocus.com/catalog/oracle/oow17/catalogjavaone17?search=CON1491&showEnrolled=false[Java One Slides]
+
+Mailing List: http://mail.openjdk.java.net/mailman/listinfo/jdbc-spec-discuss
+
+http://hg.openjdk.java.net/jdk/sandbox/file/b49fd5dbaab6/src/java.sql/share/classes/java/sql2[repository]
+
+[NOTE.speaker]
+====
+It really feels like Oracle is on its very own agenda here.
+
+Everybody interested in reactive and Lukas Eder looked at it.
+Most feedback didn't had much of an effect.
+
+No visible feedback from other database vendors.
+====
+
+=== Does that sound familiar?
+
+2004
+
+EJBs
+
+Anybody remembers the time?
+
+=== R2DBC
+
+**R**eactive **R**elational **D**atabase **C**onnectivity
+
+There is a project exploring possibilities: https://github.com/nebhale/r2dbc
 
 include::self.ad[]
