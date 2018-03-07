@@ -108,6 +108,18 @@ Optional returntype
 
 === Support composable repositories.
 
+[source,java]
+----
+interface MyRepository
+    extends CrudRepository,
+            ARepo, BRepo {...}
+
+class ARepoImpl implements ARepo {...}
+class BRepoImpl implements BRepo {...}
+----
+
+[NOTE.speaker]
+====
 Multiple "fragments" implementing some methods get combined into a repository.
 
 Greater flexibility internally.
@@ -117,33 +129,46 @@ More then one custom implementation class.
 See https://github.com/spring-projects/spring-data-examples/commit/5c01c4413085c37cb1f66ff9dce6bcbb2d2245e9
 
 and https://spring.io/blog/2017/06/20/a-preview-on-spring-data-kay#composable-repositories
+====
 
-=== Fluent MongoOperations
-
-```
+=== `MongoOperations`
+[source,java]
+----
 Query query = new BasicQuery(new Document());
 List<SWCharacter> all = ops.find(query, SWCharacter.class, "star-wars");
-```
+----
 
-Using FluentMongoOperations this above can be expressed as
+=== `FluentMongoOperations`
 
-```
-List<SWCharacter> all = ops.find(SWCharacter.class)
+[source,java]
+----
+List<SWCharacter> all = ops
+  .find(SWCharacter.class)
   .inCollection("star-wars")
   .all();
-```
+----
 
 === Upgrade to Spring Framework 5.
 
 The important part is the reactive support
 
-=== Reactive support for MongoDB, Redis, Couchbase, and Apache Cassandra.
+=== Reactive Who?
+
+* MongoDB
+
+* Redis
+
+* Couchbase
+
+* Apache Cassandra
+
+=== Reactive How?
 
 * `@EnableReactive???Repositories`
 
 * extend `ReactiveCrudRepository`
 
-* declare methods returning `Flux`, `Mono`
+* declare methods using `Flux`, `Mono`
 
 ```
   @GetMapping("/people")
@@ -182,6 +207,12 @@ very, very limited
 === Sorry no pagination yet
 
 === MyBatis integration
+
+== Spanner
+
+> Cloud Spanner is the only enterprise-grade, globally-distributed, and strongly consistent database service built for the cloud specifically to combine the benefits of relational database structure with non-relational horizontal scale.
+
+https://github.com/spring-cloud/spring-cloud-gcp/tree/master/spring-cloud-gcp-data-spanner
 
 == TOQAEFT
 
@@ -239,5 +270,7 @@ Anybody remembers the time?
 **R**eactive **R**elational **D**atabase **C**onnectivity
 
 There is a project exploring possibilities: https://github.com/nebhale/r2dbc
+
+
 
 include::self.ad[]
