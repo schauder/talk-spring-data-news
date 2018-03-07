@@ -9,9 +9,9 @@
 
 include::footer.ad[]
 
-== What is Spring Data?
+== **Someone dragged me in here.**
 
-Someone dragged me in here.
+What is Spring Data?
 
 == Old new or new new?
 
@@ -47,9 +47,13 @@ ETA: June 2018
 
 * Java 8 is required.
 
-* Use of new language features (Lambdas, Stream).
+* Use of new language features (Lambdas).
 
-* Use of new classes (Optional, java.time API).
+* Use of new classes
+
+** `Optional`.
+** `java.time` API.
+** `Stream` API.
 
 [NOTE.speaker]
 ====
@@ -132,10 +136,13 @@ and https://spring.io/blog/2017/06/20/a-preview-on-spring-data-kay#composable-re
 ====
 
 === `MongoOperations`
+
 [source,java]
 ----
-Query query = new BasicQuery(new Document());
-List<SWCharacter> all = ops.find(query, SWCharacter.class, "star-wars");
+Query query =
+  new BasicQuery(new Document());
+List<SWCharacter> all =
+  ops.find(query, SWCharacter.class, "star-wars");
 ----
 
 === `FluentMongoOperations`
@@ -151,6 +158,8 @@ List<SWCharacter> all = ops
 === Upgrade to Spring Framework 5.
 
 The important part is the reactive support
+
+== Reactive Support
 
 === Reactive Who?
 
@@ -170,25 +179,66 @@ The important part is the reactive support
 
 * declare methods using `Flux`, `Mono`
 
-```
-  @GetMapping("/people")
-  Flux<String> namesByLastname(@RequestParam Mono<String> lastname) {
+=== Reactive Use
 
-    Flux<Person> result = repository.findByLastname(lastname);
-    return result.map(it -> it.getFullName());
-  }
-```
+[source,java]
+----
+@GetMapping("/people")
+Flux<String> namesByLastname(@RequestParam Mono<String> lastname) {
+
+  Flux<Person> result =
+    repository.findByLastname(lastname);
+
+  return result
+    .map(it -> it.getFullName());
+}
+----
 
 == Ingalls
 
 === Mongo DB ChangeStreams
 
-```
-Aggregation filter = newAggregation(User.class, match(where("age").gte(38));
-Flux<ChangeStreamEvent<User>> flux = reactiveTemplate.changeStream(filter), User.class, ChangeStreamOptions.empty());
-```
+[source,java]
+----
+Aggregation filter =
+  newAggregation(
+    User.class,
+    match(where("age").gte(38)
+  );
 
-=== Mongo DB jsonSchema
+Flux<ChangeStreamEvent<User>> flux =
+  reactiveTemplate.changeStream(
+    filter,
+    User.class,
+    ChangeStreamOptions.empty()
+  );
+----
+
+=== Mongo DB jsonSchema (define)
+
+[source,java]
+----
+MongoJsonSchema schema =
+  MongoJsonSchema.builder()
+    .required("address")
+    .property(
+      object("address")
+        .properties(
+           string("street").matching("^Apple.*")
+        )
+    ).build();
+----
+
+=== Mongo DB jsonSchema (use)
+
+[source,java]
+----
+List<Person> person =
+  template.find(
+    query(matchingDocumentStructure(schema)),
+    Person.class)
+  );
+----
 
 https://github.com/spring-projects/spring-data-mongodb/pull/524
 
