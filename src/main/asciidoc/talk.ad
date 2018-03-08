@@ -13,6 +13,13 @@ include::footer.ad[]
 
 What is Spring Data?
 
+[NOTE.speaker]
+====
+The goal of Spring Data is to provide  a consistent API for various persistent stores, inspired by Domain Driven Design.
+
+That does not mean SD allows you to switch stores, but when working with multiple stores, things should feel familiar for the developers.
+====
+
 == Old new or new new?
 
 === Not new
@@ -141,8 +148,13 @@ and https://spring.io/blog/2017/06/20/a-preview-on-spring-data-kay#composable-re
 ----
 Query query =
   new BasicQuery(new Document());
+
 List<SWCharacter> all =
-  ops.find(query, SWCharacter.class, "star-wars");
+  ops.find(
+    query,
+    SWCharacter.class,
+    "star-wars"
+  );
 ----
 
 === `FluentMongoOperations`
@@ -160,6 +172,23 @@ List<SWCharacter> all = ops
 The important part is the reactive support
 
 == Reactive Support
+
+=== Reactive What?
+
+=== !
+
+[quote, "Rossen Stoyanchev"]
+____
+In a nutshell, reactive programming is about non-blocking, event-driven applications that scale with a small number of threads with back pressure as a key ingredient that aims to ensure producers to not overwhelm consumers.
+____
+
+=== !
+
+[quote, "Reactive Streams"]
+____
+The main goal of Reactive Streams is to govern the exchange of stream data across an asynchronous boundary — think passing elements on to another thread or thread-pool — while ensuring that the receiving side is not forced to buffer arbitrary amounts of data.
+____
+
 
 === Reactive Who?
 
@@ -184,7 +213,8 @@ The important part is the reactive support
 [source,java]
 ----
 @GetMapping("/people")
-Flux<String> namesByLastname(@RequestParam Mono<String> lastname) {
+Flux<String> namesByLastname(
+  @RequestParam Mono<String> lastname) {
 
   Flux<Person> result =
     repository.findByLastname(lastname);
@@ -203,15 +233,13 @@ Flux<String> namesByLastname(@RequestParam Mono<String> lastname) {
 Aggregation filter =
   newAggregation(
     User.class,
-    match(where("age").gte(38)
-  );
+    match(where("age").gte(38));
 
 Flux<ChangeStreamEvent<User>> flux =
   reactiveTemplate.changeStream(
     filter,
     User.class,
-    ChangeStreamOptions.empty()
-  );
+    ChangeStreamOptions.empty());
 ----
 
 === Mongo DB jsonSchema (define)
@@ -248,17 +276,49 @@ https://github.com/spring-projects/spring-data-mongodb/pull/524
 
 (needs top level section)
 
+=== Why?
+
+[NOTE.speaker]
+====
+People asked for it.
+JPA brings a lot of complexity you might want to avoid
+====
+
+=== Constraints
+
+* No Proxies (for Entities)
+
+* No Lazy Loading
+
+* No Dirty checking
+
+* Easy is better
+
 === @Query support
 
 === Crud support
 
-very, very limited
+* very, very limited
+
+* remove referenced Aggregate Members
+
+* update the Aggregate Root
+
+* add referenced Aggregate Members
+
+=== NamingStrategy
+
+=== Events
 
 === Sorry no pagination yet
 
 === MyBatis integration
 
-== Spanner
+=== Inofficial Boot Starter
+
+https://github.com/schauder/spring-data-jdbc-boot-starter
+
+== Google Spanner
 
 > Cloud Spanner is the only enterprise-grade, globally-distributed, and strongly consistent database service built for the cloud specifically to combine the benefits of relational database structure with non-relational horizontal scale.
 
