@@ -294,9 +294,9 @@ JPA brings a lot of complexity you might want to avoid
 
 * Easy is better
 
-=== @Query support
+=== `@Query` support
 
-=== Crud support
+=== CRUD support
 
 * very, very limited
 
