@@ -4,7 +4,7 @@
 :twitter-tag: @jensschauder
 :conference-tag: #javaland
 :talk-tag: #spring-data-news
-:slide-link: http://to-be-defined
+:slide-link: http://bit.ly/talk-sd-news
 :linkattrs:
 
 include::footer.ad[]
@@ -30,6 +30,8 @@ still gets bug fixes.
 
 Used by Spring Boot 1.5.x
 
+https://github.com/spring-projects/spring-data-commons/wiki/Release-Train-Ingalls
+
 === Somewhat new
 
 Kay: (2.0.x)
@@ -40,6 +42,8 @@ current: 2.0.5
 
 Used by Spring Boot 2.0 (Feb. 2018)
 
+https://github.com/spring-projects/spring-data-commons/wiki/Release-Train-Kay
+
 === Super new
 
 Lovelace: (2.1.x)
@@ -47,6 +51,8 @@ Lovelace: (2.1.x)
 current: 2.1.0.M1
 
 ETA: June 2018
+
+https://github.com/spring-projects/spring-data-commons/wiki/Release-Train-lovelace
 
 == Kay
 
@@ -423,6 +429,12 @@ Anybody remembers the time?
 
 There is a project exploring possibilities: https://github.com/nebhale/r2dbc
 
+== Questions?
 
+I'll be here.
+
+Find me and ask away.
+
+Everybody else: Have a nice day and thanks for the fish.
 
 include::self.ad[]
