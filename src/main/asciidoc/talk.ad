@@ -274,7 +274,10 @@ https://github.com/spring-projects/spring-data-mongodb/pull/524
 
 == Spring Data JDBC
 
-(needs top level section)
+[quote, "Reid Hoffman"]
+____
+If you are not embarrassed by the first version of your product, you’ve launched too late.
+____
 
 === Why?
 
@@ -296,6 +299,25 @@ JPA brings a lot of complexity you might want to avoid
 
 === `@Query` support
 
+[source,java]
+----
+@Query("SELECT * FROM Person
+    WHERE name  < :upper and name > :lower")
+List<Person> findByNamedRange(
+    @Param("lower") String lower,
+    @Param("upper") String upper
+);
+----
+
+=== `@Query` + `Modifying`
+
+[source,java]
+----
+@Modifying
+@Query("DELETE FROM Person WHERE name = :name")
+boolean deleteByName(@Param("name") String name);
+----
+
 === CRUD support
 
 * very, very limited
@@ -306,9 +328,33 @@ JPA brings a lot of complexity you might want to avoid
 
 * add referenced Aggregate Members
 
+=== Aggregate Root
+
+* Everything you reference is part of the aggregate.
+
+* Use Ids for crossing aggregates.
+
 === NamingStrategy
 
 === Events
+
+[source,java]
+----
+@Bean
+ApplicationListener<BeforeDelete> softDeleteListener() {
+
+  return event -> {
+
+    DummyEntity entity = (DummyEntity) event.getOptionalEntity()
+        .orElseThrow(AssertionFailedError::new);
+
+    entity.deleted = true;
+    List<DbAction> actions = event.getChange().getActions();
+    actions.clear();
+    actions.add(DbAction.update(entity, null, null));
+  };
+}
+----
 
 === Sorry no pagination yet
 
@@ -317,6 +363,19 @@ JPA brings a lot of complexity you might want to avoid
 === Inofficial Boot Starter
 
 https://github.com/schauder/spring-data-jdbc-boot-starter
+
+=== Default Answer
+
+* No that feature doesn't exist yet.
+
+* We accept pull requests.
+
+[NOTE.speaker]
+====
+Already 8 contributions.
+Second team member only has 9 (mostly polishing)
+====
+
 
 == Google Spanner
 
