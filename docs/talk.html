@@ -159,7 +159,7 @@ Flux&lt;<span class="predefined-type">String</span>&gt; namesByLastname(
   <span class="keyword">return</span> result
     .map(it -&gt; it.getFullName());
 }</code></pre></div></div></section></section>
-<section><section id="_ingalls"><h2>Ingalls</h2></section><section id="_mongo_db_changestreams"><h2>Mongo DB ChangeStreams</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">Aggregation filter =
+<section><section id="_lovelace"><h2>Lovelace</h2></section><section id="_mongo_db_changestreams"><h2>Mongo DB ChangeStreams</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">Aggregation filter =
   newAggregation(
     User.class,
     match(where(<span class="string"><span class="delimiter">&quot;</span><span class="content">age</span><span class="delimiter">&quot;</span></span>).gte(<span class="integer">38</span>));
@@ -168,20 +168,7 @@ Flux&lt;ChangeStreamEvent&lt;User&gt;&gt; flux =
   reactiveTemplate.changeStream(
     filter,
     User.class,
-    ChangeStreamOptions.empty());</code></pre></div></div></section><section id="_mongo_db_jsonschema_define"><h2>Mongo DB jsonSchema (define)</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">MongoJsonSchema schema =
-  MongoJsonSchema.builder()
-    .required(<span class="string"><span class="delimiter">&quot;</span><span class="content">address</span><span class="delimiter">&quot;</span></span>)
-    .property(
-      object(<span class="string"><span class="delimiter">&quot;</span><span class="content">address</span><span class="delimiter">&quot;</span></span>)
-        .properties(
-           string(<span class="string"><span class="delimiter">&quot;</span><span class="content">street</span><span class="delimiter">&quot;</span></span>).matching(<span class="string"><span class="delimiter">&quot;</span><span class="content">^Apple.*</span><span class="delimiter">&quot;</span></span>)
-        )
-    ).build();</code></pre></div></div></section><section id="_mongo_db_jsonschema_use"><h2>Mongo DB jsonSchema (use)</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="predefined-type">List</span>&lt;Person&gt; person =
-  template.find(
-    query(matchingDocumentStructure(schema)),
-    Person.class)
-  );</code></pre></div></div>
-<div class="paragraph"><p><a href="https://github.com/spring-projects/spring-data-mongodb/pull/524" class="bare">https://github.com/spring-projects/spring-data-mongodb/pull/524</a></p></div></section><section id="_spring_data_jdbc"><h2>Spring Data JDBC</h2></section></section>
+    ChangeStreamOptions.empty());</code></pre></div></div></section><section id="_neo4j"><h2>Neo4J</h2><div class="ulist"><ul><li><p>No need for Default Constructors</p></li><li><p>Auditing Support</p><div class="ulist"><ul><li><p><code>@CreatedDate</code></p></li><li><p><code>@CreatedBy</code>,</p></li><li><p><code>@LastModifiedDate</code></p></li><li><p><code>@LastModifiedBy</code></p></li></ul></div></li></ul></div></section><section id="_spring_data_jdbc"><h2>Spring Data JDBC</h2></section></section>
 <section><section id="_spring_data_jdbc_2"><h2>Spring Data JDBC</h2><div class="quoteblock"><blockquote><div class="paragraph"><p>If you are not embarrassed by the first version of your product, you’ve launched too late.</p></div></blockquote><div class="attribution">&#8212; Reid Hoffman</div></div></section><section id="_why"><h2>Why?</h2><aside class="notes"><div class="paragraph"><p>People asked for it.
 JPA brings a lot of complexity you might want to avoid</p></div></aside></section><section id="_constraints"><h2>Constraints</h2><div class="ulist"><ul><li><p>No Proxies (for Entities)</p></li><li><p>No Lazy Loading</p></li><li><p>No Dirty checking</p></li><li><p>Easy is better</p></li></ul></div></section><section id="__code_query_code_support"><h2><code>@Query</code> support</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="annotation">@Query</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM Person
     WHERE name  &lt; :upper and name &gt; :lower</span><span class="delimiter">&quot;</span></span>)

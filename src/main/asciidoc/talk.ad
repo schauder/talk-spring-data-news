@@ -224,7 +224,7 @@ Flux<String> namesByLastname(
 }
 ----
 
-== Ingalls
+== Lovelace
 
 === Mongo DB ChangeStreams
 
@@ -242,33 +242,16 @@ Flux<ChangeStreamEvent<User>> flux =
     ChangeStreamOptions.empty());
 ----
 
-=== Mongo DB jsonSchema (define)
+=== Neo4J
 
-[source,java]
-----
-MongoJsonSchema schema =
-  MongoJsonSchema.builder()
-    .required("address")
-    .property(
-      object("address")
-        .properties(
-           string("street").matching("^Apple.*")
-        )
-    ).build();
-----
+* No need for Default Constructors
 
-=== Mongo DB jsonSchema (use)
+* Auditing Support
+** `@CreatedDate`
+** `@CreatedBy`,
+** `@LastModifiedDate`
+** `@LastModifiedBy`
 
-[source,java]
-----
-List<Person> person =
-  template.find(
-    query(matchingDocumentStructure(schema)),
-    Person.class)
-  );
-----
-
-https://github.com/spring-projects/spring-data-mongodb/pull/524
 
 === Spring Data JDBC
 
