@@ -2,7 +2,7 @@
 :revealjs_customtheme: theme/schauderhaft.css
 :icons: font
 :twitter-tag: @jensschauder
-:conference-tag: #javaland
+:conference-tag: @jaxcon
 :talk-tag: #spring-data-news
 :slide-link: http://bit.ly/talk-sd-news
 :linkattrs:
@@ -38,7 +38,7 @@ Kay: (2.0.x)
 
 1st GA Oct. 2017
 
-current: 2.0.5
+current: SR6
 
 Used by Spring Boot 2.0 (Feb. 2018)
 
@@ -48,9 +48,9 @@ https://github.com/spring-projects/spring-data-commons/wiki/Release-Train-Kay
 
 Lovelace: (2.1.x)
 
-current: 2.1.0.M1
+current: M2
 
-ETA: June 2018
+ETA: September 2018
 
 https://github.com/spring-projects/spring-data-commons/wiki/Release-Train-lovelace
 
@@ -248,15 +248,42 @@ Flux<ChangeStreamEvent<User>> flux =
     ChangeStreamOptions.empty());
 ----
 
+=== Mongo DB Transactions
+
+Requires
+
+* driver 3.8.0-beta1
+* server 3.7.5
+* Server part of a replica set (size 1 is ok)
+
+=== Spring Transaction Manager
+
+[source,java]
+----
+@Bean
+MongoTransactionManager transactionManager(
+        MongoDbFactory dbFactory
+) {
+    return new MongoTransactionManager(dbFactory);
+}
+----
+
+=== Alternatives
+
+* API for full manual control.
+
+* API for manually tying to a `PlatformTransactionManager`
+
 === Neo4J
 
-* No need for Default Constructors
+No need for Default Constructors
 
-* Auditing Support
-** `@CreatedDate`
-** `@CreatedBy`,
-** `@LastModifiedDate`
-** `@LastModifiedBy`
+=== Neo4J Auditing Support
+
+* `@CreatedDate`
+* `@CreatedBy`,
+* `@LastModifiedDate`
+* `@LastModifiedBy`
 
 
 === Spring Data JDBC
@@ -274,6 +301,9 @@ ____
 ====
 People asked for it.
 JPA brings a lot of complexity you might want to avoid
+Lazy Loading
+Dirty Checking
+First level Cache
 ====
 
 === Constraints
@@ -309,9 +339,11 @@ boolean deleteByName(@Param("name") String name);
 
 === CRUD support
 
-* very, very limited
+very, very limited
 
-* remove referenced Aggregate Members
+=== CRUD with References
+
+* remove all formerly referenced Aggregate Members
 
 * update the Aggregate Root
 
@@ -324,6 +356,8 @@ boolean deleteByName(@Param("name") String name);
 * Use Ids for crossing aggregates.
 
 === NamingStrategy
+
+There is a PR for `@Column` and `@Table` annotations
 
 === Events
 
@@ -361,10 +395,8 @@ https://github.com/schauder/spring-data-jdbc-boot-starter
 
 [NOTE.speaker]
 ====
-Already 8 contributions.
-Second team member only has 9 (mostly polishing)
+Developer with the second most contributions is not a team member.
 ====
-
 
 == Google Spanner
 

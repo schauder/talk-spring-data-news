@@ -97,7 +97,7 @@ table.CodeRay td.code>pre{padding:0}
 </script>
 <div id="schauderhaft-footer" class="footer">
     <span class="element">@jensschauder</span>
-    <span class="element">#javaland</span>
+    <span class="element">@jaxcon</span>
     <span class="element">#spring-data-news</span>
 </div></div></section>
 <section id="__strong_someone_dragged_me_in_here_strong"><h2><strong>Someone dragged me in here.</strong></h2><div class="paragraph"><p>What is Spring Data?</p></div>
@@ -108,11 +108,11 @@ table.CodeRay td.code>pre{padding:0}
 <div class="paragraph"><p>Used by Spring Boot 1.5.x</p></div>
 <div class="paragraph"><p><a href="https://github.com/spring-projects/spring-data-commons/wiki/Release-Train-Ingalls" class="bare">https://github.com/spring-projects/spring-data-commons/wiki/Release-Train-Ingalls</a></p></div></section><section id="_somewhat_new"><h2>Somewhat new</h2><div class="paragraph"><p>Kay: (2.0.x)</p></div>
 <div class="paragraph"><p>1st GA Oct. 2017</p></div>
-<div class="paragraph"><p>current: 2.0.5</p></div>
+<div class="paragraph"><p>current: SR6</p></div>
 <div class="paragraph"><p>Used by Spring Boot 2.0 (Feb. 2018)</p></div>
 <div class="paragraph"><p><a href="https://github.com/spring-projects/spring-data-commons/wiki/Release-Train-Kay" class="bare">https://github.com/spring-projects/spring-data-commons/wiki/Release-Train-Kay</a></p></div></section><section id="_super_new"><h2>Super new</h2><div class="paragraph"><p>Lovelace: (2.1.x)</p></div>
-<div class="paragraph"><p>current: 2.1.0.M1</p></div>
-<div class="paragraph"><p>ETA: June 2018</p></div>
+<div class="paragraph"><p>current: M2</p></div>
+<div class="paragraph"><p>ETA: September 2018</p></div>
 <div class="paragraph"><p><a href="https://github.com/spring-projects/spring-data-commons/wiki/Release-Train-lovelace" class="bare">https://github.com/spring-projects/spring-data-commons/wiki/Release-Train-lovelace</a></p></div></section></section>
 <section><section id="_kay"><h2>Kay</h2></section><section id="_upgrade_to_java_8"><h2>Upgrade to Java 8.</h2><div class="ulist"><ul><li><p>Java 8 is required.</p></li><li><p>Use of new language features (Lambdas).</p></li><li><p>Use of new classes</p><div class="ulist"><ul><li><p><code>Optional</code>.</p></li><li><p><code>java.time</code> API.</p></li><li><p><code>Stream</code> API.</p></li></ul></div></li></ul></div>
 <aside class="notes"><div class="paragraph"><p>We tried to use more Optional and Streams but had to rip it out for performance reasons :-/</p></div></aside></section><section id="_pet_peeve"><h2>Pet Peeve</h2><div class="paragraph"><p>You don&#8217;t want to use <code>LocalDateTime</code>.</p></div>
@@ -171,16 +171,25 @@ Flux&lt;ChangeStreamEvent&lt;User&gt;&gt; flux =
   reactiveTemplate.changeStream(
     filter,
     User.class,
-    ChangeStreamOptions.empty());</code></pre></div></div></section><section id="_neo4j"><h2>Neo4J</h2><div class="ulist"><ul><li><p>No need for Default Constructors</p></li><li><p>Auditing Support</p><div class="ulist"><ul><li><p><code>@CreatedDate</code></p></li><li><p><code>@CreatedBy</code>,</p></li><li><p><code>@LastModifiedDate</code></p></li><li><p><code>@LastModifiedBy</code></p></li></ul></div></li></ul></div></section><section id="_spring_data_jdbc"><h2>Spring Data JDBC</h2></section></section>
+    ChangeStreamOptions.empty());</code></pre></div></div></section><section id="_mongo_db_transactions"><h2>Mongo DB Transactions</h2><div class="paragraph"><p>Requires</p></div>
+<div class="ulist"><ul><li><p>driver 3.8.0-beta1</p></li><li><p>server 3.7.5</p></li><li><p>Server part of a replica set (size 1 is ok)</p></li></ul></div></section><section id="_spring_transaction_manager"><h2>Spring Transaction Manager</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="annotation">@Bean</span>
+MongoTransactionManager transactionManager(
+        MongoDbFactory dbFactory
+) {
+    <span class="keyword">return</span> <span class="keyword">new</span> MongoTransactionManager(dbFactory);
+}</code></pre></div></div></section><section id="_alternatives"><h2>Alternatives</h2><div class="ulist"><ul><li><p>API for full manual control.</p></li><li><p>API for manually tying to a <code>PlatformTransactionManager</code></p></li></ul></div></section><section id="_neo4j"><h2>Neo4J</h2><div class="paragraph"><p>No need for Default Constructors</p></div></section><section id="_neo4j_auditing_support"><h2>Neo4J Auditing Support</h2><div class="ulist"><ul><li><p><code>@CreatedDate</code></p></li><li><p><code>@CreatedBy</code>,</p></li><li><p><code>@LastModifiedDate</code></p></li><li><p><code>@LastModifiedBy</code></p></li></ul></div></section><section id="_spring_data_jdbc"><h2>Spring Data JDBC</h2></section></section>
 <section><section id="_spring_data_jdbc_2"><h2>Spring Data JDBC</h2><div class="quoteblock"><blockquote><div class="paragraph"><p>If you are not embarrassed by the first version of your product, you’ve launched too late.</p></div></blockquote><div class="attribution">&#8212; Reid Hoffman</div></div></section><section id="_why"><h2>Why?</h2><aside class="notes"><div class="paragraph"><p>People asked for it.
-JPA brings a lot of complexity you might want to avoid</p></div></aside></section><section id="_constraints"><h2>Constraints</h2><div class="ulist"><ul><li><p>No Proxies (for Entities)</p></li><li><p>No Lazy Loading</p></li><li><p>No Dirty checking</p></li><li><p>Easy is better</p></li></ul></div></section><section id="__code_query_code_support"><h2><code>@Query</code> support</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="annotation">@Query</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM Person
+JPA brings a lot of complexity you might want to avoid
+Lazy Loading
+Dirty Checking
+First level Cache</p></div></aside></section><section id="_constraints"><h2>Constraints</h2><div class="ulist"><ul><li><p>No Proxies (for Entities)</p></li><li><p>No Lazy Loading</p></li><li><p>No Dirty checking</p></li><li><p>Easy is better</p></li></ul></div></section><section id="__code_query_code_support"><h2><code>@Query</code> support</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="annotation">@Query</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM Person
     WHERE name  &lt; :upper and name &gt; :lower</span><span class="delimiter">&quot;</span></span>)
 <span class="predefined-type">List</span>&lt;Person&gt; findByNamedRange(
     <span class="annotation">@Param</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">lower</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> lower,
     <span class="annotation">@Param</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">upper</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> upper
 );</code></pre></div></div></section><section id="__code_query_code_code_modifying_code"><h2><code>@Query</code> + <code>Modifying</code></h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="annotation">@Modifying</span>
 <span class="annotation">@Query</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">DELETE FROM Person WHERE name = :name</span><span class="delimiter">&quot;</span></span>)
-<span class="type">boolean</span> deleteByName(<span class="annotation">@Param</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> name);</code></pre></div></div></section><section id="_crud_support"><h2>CRUD support</h2><div class="ulist"><ul><li><p>very, very limited</p></li><li><p>remove referenced Aggregate Members</p></li><li><p>update the Aggregate Root</p></li><li><p>add referenced Aggregate Members</p></li></ul></div></section><section id="_aggregate_root"><h2>Aggregate Root</h2><div class="ulist"><ul><li><p>Everything you reference is part of the aggregate.</p></li><li><p>Use Ids for crossing aggregates.</p></li></ul></div></section><section id="_namingstrategy"><h2>NamingStrategy</h2></section><section id="_events"><h2>Events</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="annotation">@Bean</span>
+<span class="type">boolean</span> deleteByName(<span class="annotation">@Param</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> name);</code></pre></div></div></section><section id="_crud_support"><h2>CRUD support</h2><div class="paragraph"><p>very, very limited</p></div></section><section id="_crud_with_references"><h2>CRUD with References</h2><div class="ulist"><ul><li><p>remove all formerly referenced Aggregate Members</p></li><li><p>update the Aggregate Root</p></li><li><p>add referenced Aggregate Members</p></li></ul></div></section><section id="_aggregate_root"><h2>Aggregate Root</h2><div class="ulist"><ul><li><p>Everything you reference is part of the aggregate.</p></li><li><p>Use Ids for crossing aggregates.</p></li></ul></div></section><section id="_namingstrategy"><h2>NamingStrategy</h2><div class="paragraph"><p>There is a PR for <code>@Column</code> and <code>@Table</code> annotations</p></div></section><section id="_events"><h2>Events</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="annotation">@Bean</span>
 ApplicationListener&lt;BeforeDelete&gt; softDeleteListener() {
 
   <span class="keyword">return</span> event -&gt; {
@@ -194,8 +203,7 @@ ApplicationListener&lt;BeforeDelete&gt; softDeleteListener() {
     actions.add(DbAction.update(entity, <span class="predefined-constant">null</span>, <span class="predefined-constant">null</span>));
   };
 }</code></pre></div></div></section><section id="_sorry_no_pagination_yet"><h2>Sorry no pagination yet</h2></section><section id="_mybatis_integration"><h2>MyBatis integration</h2></section><section id="_inofficial_boot_starter"><h2>Inofficial Boot Starter</h2><div class="paragraph"><p><a href="https://github.com/schauder/spring-data-jdbc-boot-starter" class="bare">https://github.com/schauder/spring-data-jdbc-boot-starter</a></p></div></section><section id="_default_answer"><h2>Default Answer</h2><div class="ulist"><ul><li><p>No that feature doesn&#8217;t exist yet.</p></li><li><p>We accept pull requests.</p></li></ul></div>
-<aside class="notes"><div class="paragraph"><p>Already 8 contributions.
-Second team member only has 9 (mostly polishing)</p></div></aside></section></section>
+<aside class="notes"><div class="paragraph"><p>Developer with the second most contributions is not a team member.</p></div></aside></section></section>
 <section id="_google_spanner"><h2>Google Spanner</h2><div class="quoteblock"><blockquote><div class="paragraph"><p>Cloud Spanner is the only enterprise-grade, globally-distributed, and strongly consistent database service built for the cloud specifically to combine the benefits of relational database structure with non-relational horizontal scale.</p></div></blockquote></div>
 <div class="paragraph"><p><a href="https://github.com/spring-cloud/spring-cloud-gcp/tree/master/spring-cloud-gcp-data-spanner" class="bare">https://github.com/spring-cloud/spring-cloud-gcp/tree/master/spring-cloud-gcp-data-spanner</a></p></div></section>
 <section><section id="_toqaeft"><h2>TOQAEFT</h2><div class="paragraph"><p>The One Question Asked Every Freaking Time</p></div></section><section id="_is_there_reactive_support_for_jpa_jdbc"><h2>Is there reactive support for JPA/JDBC?</h2><div class="paragraph"><p>TL;DR: No.</p></div></section><section id="_long_version"><h2>Long Version</h2><div class="paragraph"><p>JPA is unfit for a reactive API.</p></div>
